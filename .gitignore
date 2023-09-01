@@ -1,0 +1,34 @@
+## Angular ##
+.angular/
+
+## Docker ##
+Dockerfile-x
+
+## Env Vars ##
+.env
+
+## Javascript ##
+dist
+node_modules
+src/DomainManager/src/assets/settings.json
+
+## Logs ##
+/debug.log
+/src/DomainManager/debug.log
+
+## MacOS ##
+.DS_Store
+.idea/
+
+## Python ##
+__pycache__
+.mypy_cache
+.pytest_cache
+.python-version
+.venv/
+
+## Terraform ##
+.terraform
+
+## VS Code ##
+.vscode
