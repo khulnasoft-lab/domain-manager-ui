@@ -1,0 +1,48 @@
+<div>
+  <button
+    class="all_tab_option_button"
+    mat-raised-button
+    color="primary"
+    [matMenuTriggerFor]="menu"
+  >
+    Options
+  </button>
+  <mat-menu #menu="matMenu">
+    <button (click)="umTabSvc.getUserAPIKey()" mat-menu-item>
+      <mat-icon>autorenew</mat-icon>Generate API Key
+    </button>
+    <button (click)="deleteUser()" mat-menu-item>
+      <mat-icon>delete_forever</mat-icon>Delete User
+    </button>
+    <button
+      *ngIf="umTabSvc.user_data?.Enabled"
+      (click)="disableUser()"
+      mat-menu-item
+    >
+      <mat-icon>location_disabled</mat-icon>Disable User
+    </button>
+    <button
+      *ngIf="!umTabSvc.user_data?.Enabled"
+      (click)="enableUser()"
+      mat-menu-item
+    >
+      <mat-icon>refresh</mat-icon>Enable User
+    </button>
+  </mat-menu>
+  <mat-tab-group
+    (selectedTabChange)="onTabChanged($event)"
+    [(selectedIndex)]="selectedTabIndex"
+  >
+    <mat-tab label="User Summary">
+      <app-user-management-details-summary></app-user-management-details-summary>
+    </mat-tab>
+
+    <mat-tab label="Groups">
+      <app-user-management-details-groups> </app-user-management-details-groups>
+    </mat-tab>
+
+    <mat-tab label="History">
+      <app-user-management-details-history></app-user-management-details-history>
+    </mat-tab>
+  </mat-tab-group>
+</div>

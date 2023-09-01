@@ -1,0 +1,201 @@
+<!-- Serious style/css cleaning is needed, Im truely sorry if I dont get to it before
+someone has to deal with this
+-Dylan Johnson -->
+<h2 mat-dialog-title>Upload {{ uploadType | titlecase }}</h2>
+<button
+  mat-button
+  style="display: inline-block; float: right; top: -4em; margin-bottom: -4em"
+  (click)="closeDialog()"
+>
+  <mat-icon>close</mat-icon>
+</button>
+<mat-dialog-content class="upload-dialog-content">
+  <div *ngIf="multipleFileUpload" class="text-muted" style="margin-bottom: 1em">
+    Select files from your local file browser by clicking the 'Select Files'
+    button or drag and drop your {{ uploadObjectName }} files.
+  </div>
+  <div
+    *ngIf="!multipleFileUpload"
+    class="text-muted"
+    style="margin-bottom: 1em"
+  >
+    Select a file from your local file browser by clicking the 'Select File'
+    button or drag and drop your {{ uploadObjectName }} file.
+  </div>
+  <!-- <div class="text-muted" style="margin-bottom: 1em">
+    Select {{ isMultipleDisplayText }} {{ uploadType | lowercase }}s to upload.
+    Select the files through your local file browser by clicking the 'select
+    file below' or drag and drop your files on to the drag and drop zone below.
+  </div> -->
+  <ngfFormData [files]="files" postName="zip" [(FormData)]="sendableFormData">
+  </ngfFormData>
+  <!-- Drag and Drop Area -->
+  <div style="display: flex; flex-direction: column">
+    <div
+      style="width: 100%; height: 8em; display: flex; flex-direction: column"
+    >
+      <ngfUploadStatus [(percent)]="uploadPercent" [httpEvent]="httpEvent">
+      </ngfUploadStatus>
+      <div
+        ngfDrop
+        style="height: 100%; flex-grow: 1"
+        [(validDrag)]="baseDropValid"
+        (fileOver)="hasBaseDropZoneOver = $event"
+        [(files)]="files"
+        [accept]="uploadFileType"
+        [maxSize]="maxSize"
+        [(dragFiles)]="dragFiles"
+        [(lastInvalids)]="lastInvalids"
+        class="well my-drop-zone"
+        [class.invalid-drag]="baseDropValid === false"
+        [class.valid-drag]="baseDropValid"
+        (filesChange)="fileAdded()"
+        [fileDropDisabled]="fileDropDisabled"
+      >
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            padding: 1em 0 0 0;
+          "
+        >
+          Drag and drop files here<br />
+          or
+        </div>
+
+        <!-- Open File Browser GRR NOTE THE NGIF the two divs must stay the same-->
+        <div style="display: flex; padding: 0 18em">
+          <div
+            *ngIf="multipleFileUpload"
+            multiple="true"
+            ngfSelect
+            [accept]="uploadFileType"
+            [maxSize]="maxSize"
+            [(files)]="files"
+            [(lastInvalids)]="lastInvalids"
+            (filesChange)="fileAdded()"
+            style="width: 100%; display: inline-block"
+          >
+            <button style="width: 100%" mat-raised-button color="primary">
+              Select Files
+            </button>
+          </div>
+          <div
+            *ngIf="!multipleFileUpload"
+            ngfSelect
+            [accept]="uploadFileType"
+            [maxSize]="maxSize"
+            [(files)]="files"
+            [(lastInvalids)]="lastInvalids"
+            (filesChange)="fileAdded()"
+            style="width: 100%; display: inline-block"
+          >
+            <button style="width: 100%" mat-raised-button color="primary">
+              Select File
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File List -->
+  <div style="margin-bottom: 40px; margin-top: 2em">
+    <h3 *ngIf="multipleFileUpload">{{ files.length }} Queued Files</h3>
+    <h3 *ngIf="!multipleFileUpload">Queued File</h3>
+    <div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Actions</th>
+            <th *ngIf="!uploadProcessed">Overwrite</th>
+            <th *ngIf="uploadProcessed">Status</th>
+          </tr>
+        </thead>
+        <tbody style="max-height: 17em; overflow: auto">
+          <tr *ngFor="let item of files; let i = index">
+            <td>
+              <div
+                *ngIf="
+                  ['image/gif', 'image/png', 'image/jpeg'].indexOf(item.type) >=
+                  0
+                "
+              >
+                <div class="previewIcon" [ngfBackground]="item"></div>
+              </div>
+              <strong>{{ item.name }}</strong>
+            </td>
+            <td nowrap>
+              {{ item.type }}
+            </td>
+            <td nowrap>{{ item.size / 1024 / 1024 | number : ".2" }} MB</td>
+            <td nowrap>
+              <button
+                type="button"
+                class="btn btn-danger btn-xs"
+                (click)="files.splice(i, 1)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+            <td>
+              <div *ngIf="!uploadProcessed && !item.uploadStatus">New</div>
+              <div
+                *ngIf="
+                  !uploadProcessed && item.uploadStatus == 'Already Exists'
+                "
+              >
+                Overwrite?
+              </div>
+              <div *ngIf="item.uploadStatus == 'Inprogress'">
+                <mat-spinner diameter="40"></mat-spinner>
+              </div>
+              <div *ngIf="item.uploadStatus == 'Complete'">
+                <mat-icon
+                  style="
+                    font-size: 2.5em;
+                    color: green;
+                    cursor: initial;
+                    font-weight: bolder;
+                  "
+                  >done</mat-icon
+                >
+              </div>
+              <div *ngIf="item.uploadStatus == 'Failed'">
+                <mat-icon
+                  style="font-size: 2.5em; color: red; cursor: initial"
+                  [matTooltip]="item.errorMessage"
+                >
+                  priority_high</mat-icon
+                >
+              </div>
+              <div *ngIf="item.uploadStatus == 'Canceled'">
+                <mat-icon
+                  style="
+                    font-size: 2.5em;
+                    color: rgba(0, 0, 0, 1);
+                    cursor: initial;
+                  "
+                  [matTooltip]="item.errorMessage"
+                  >cancel</mat-icon
+                >
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button (click)="uploadFiles()" mat-raised-button color="primary">
+    Upload
+  </button>
+  <button mat-button color="primary" cdkFocusInitial (click)="closeDialog()">
+    Cancel
+  </button>
+</mat-dialog-actions>

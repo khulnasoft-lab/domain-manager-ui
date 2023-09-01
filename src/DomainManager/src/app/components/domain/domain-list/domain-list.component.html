@@ -1,0 +1,144 @@
+<div>
+  <div class="table-list-header flex">
+    <div class="search-bar flex">
+      <mat-form-field class="w-100" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input
+          [(ngModel)]="search_input"
+          (keyup)="filterList($event.target.value)"
+          matInput
+          placeholder="Search"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+    <div class="add-new-button-container flex">
+      <button
+        *ngIf="userIsAdmin"
+        style="height: 50px"
+        (click)="addDomain()"
+        mat-raised-button
+        color="primary"
+      >
+        Add New Domains
+      </button>
+    </div>
+  </div>
+
+  <div class="col p-0 w-100">
+    <div
+      *ngIf="loading"
+      style="text-align: center; padding-top: 2rem; padding-bottom: 2rem"
+    >
+      <mat-spinner
+        class="spinner"
+        style="margin-left: auto; margin-right: auto"
+        diameter="50"
+      ></mat-spinner>
+    </div>
+
+    <mat-table [hidden]="loading" [dataSource]="domainList" matSort>
+      <!-- Domain Name -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Domain Name</mat-header-cell
+        >
+        <mat-cell *matCellDef="let row" (click)="viewDomain(row._id)">{{
+          row.name
+        }}</mat-cell>
+      </ng-container>
+
+      <!-- Application Name -->
+      <ng-container matColumnDef="application_name_lower_case">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Application Name</mat-header-cell
+        >
+        <mat-cell *matCellDef="let row" (click)="viewDomain(row._id)">{{
+          row.application_name
+        }}</mat-cell>
+      </ng-container>
+
+      <!-- Template Base -->
+      <ng-container matColumnDef="template_base_name_lower_case">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Template Base</mat-header-cell
+        >
+        <mat-cell *matCellDef="let row" (click)="viewDomain(row._id)">{{
+          row.template_name
+        }}</mat-cell>
+      </ng-container>
+
+      <!-- Registrar Name -->
+      <ng-container matColumnDef="registrar">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Registrar</mat-header-cell
+        >
+        <mat-cell *matCellDef="let row" (click)="viewDomain(row._id)">{{
+          row.whois?.registrar
+        }}</mat-cell>
+      </ng-container>
+
+      <!-- Domain Expiration Date -->
+      <ng-container matColumnDef="expiration_date">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Expiration Date</mat-header-cell
+        >
+        <mat-cell *matCellDef="let row" (click)="viewDomain(row._id)">
+          {{ row.whois?.expiration_date | date : "MM/dd/yy" }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Is Approved -->
+      <ng-container matColumnDef="is_approved">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Approved</mat-header-cell
+        >
+        <mat-cell *matCellDef="let row">
+          <mat-icon
+            *ngIf="row.is_approved"
+            aria-hidden="false"
+            aria-label="check_circle icon"
+            >check_circle</mat-icon
+          >
+        </mat-cell>
+      </ng-container>
+
+      <!-- Is Available -->
+      <ng-container matColumnDef="isAvailable">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Is Available</mat-header-cell
+        >
+        <mat-cell *matCellDef="let row" (click)="viewDomain(row._id)">
+          <mat-icon
+            *ngIf="row.isAvailable"
+            aria-hidden="false"
+            aria-label="check_circle icon"
+            >check_circle</mat-icon
+          >
+        </mat-cell>
+      </ng-container>
+
+      <!-- Is Launched -->
+      <ng-container matColumnDef="is_launched">
+        <mat-header-cell *matHeaderCellDef mat-sort-header
+          >Is Live</mat-header-cell
+        >
+        <mat-cell *matCellDef="let row" (click)="viewDomain(row._id)">
+          <mat-icon
+            *ngIf="row.is_active"
+            aria-hidden="false"
+            aria-label="check_circle icon"
+            >check_circle</mat-icon
+          >
+        </mat-cell>
+      </ng-container>
+
+      <!-- Header Info -->
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row
+        class="table-row cursor-pointer"
+        *matRowDef="let row; columns: displayedColumns"
+      ></mat-row>
+    </mat-table>
+  </div>
+</div>
