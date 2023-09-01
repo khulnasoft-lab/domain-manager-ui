@@ -1,0 +1,170 @@
+<div class="flex flex-container tab">
+  <h5>Proxy Categorization</h5>
+  <div *ngIf="categoryList.filteredData.length > 0">
+    <p>
+      A Category Manager will have this domain categorized within 24 business
+      hours.
+    </p>
+    <p>
+      However, if you'd like to have this domain categorized sooner, you can
+      categorize this domain for each proxy below.
+    </p>
+
+    <button
+      mat-raised-button
+      *ngIf="validateRecategorize()"
+      color="primary"
+      (click)="recategorize()"
+    >
+      Request Recategorization
+    </button>
+  </div>
+  <div *ngIf="categoryList.filteredData.length === 0" [formGroup]="tabForm">
+    <p>Please submit a preferred category below.</p>
+    <p>
+      Once submitted, A Category Manager will have this domain categorized
+      within 24 business hours.
+    </p>
+    <div *ngIf="ddTabSvc.domain_data.rejected_msg">
+      <div class="icon-text">
+        <mat-icon aria-hidden="false" aria-label="error icon">error</mat-icon>
+        <strong>Categorization Request has been previously Rejected</strong>
+      </div>
+      <p><strong>Reason:</strong> {{ ddTabSvc.domain_data.rejected_msg }}</p>
+    </div>
+    <div class="text-muted mt-3 mb-3">A proxy category must be selected.</div>
+    <mat-form-field style="width: 20em" appearance="outline">
+      <mat-select formControlName="category_one">
+        <mat-option [value]="null">--Select--</mat-option>
+        <mat-option *ngFor="let c of categories" [value]="c">
+          {{ c }}
+        </mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="f.category_one.errors?.required"
+        class="invalid-feedback"
+      >
+        A category must be selected
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div
+    *ngIf="categoryList.filteredData.length === 0"
+    class="flex-row flex-end mt-4"
+  >
+    <button
+      [disabled]="!this.ddTabSvc.proxy_categoriztion_tab_form.valid"
+      mat-raised-button
+      color="primary"
+      class="flex"
+      (click)="submitCategory()"
+    >
+      Submit
+    </button>
+  </div>
+</div>
+<div *ngIf="categoryList.filteredData.length > 0">
+  <mat-table [dataSource]="categoryList" matSort>
+    <!-- Proxy Name -->
+    <ng-container matColumnDef="proxy">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Proxy Name</mat-header-cell
+      >
+      <mat-cell *matCellDef="let row">{{ row.proxy }}</mat-cell>
+    </ng-container>
+
+    <!-- Category Name -->
+    <ng-container matColumnDef="category">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Category</mat-header-cell
+      >
+      <mat-cell *matCellDef="let row">{{ row.category }}</mat-cell>
+    </ng-container>
+
+    <!-- Status -->
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Status</mat-header-cell
+      >
+      <mat-cell *matCellDef="let row">{{ row.status }}</mat-cell>
+    </ng-container>
+
+    <!-- Date Updated -->
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Last Updated</mat-header-cell
+      >
+      <mat-cell *matCellDef="let row">
+        <ng-container *ngIf="row['updated']; else elseCreated">{{
+          row.updated | date : "MM/dd/yy"
+        }}</ng-container>
+        <ng-template #elseCreated>{{
+          row.created | date : "MM/dd/yy"
+        }}</ng-template>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Recategorize -->
+    <ng-container matColumnDef="recategorize">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Action</mat-header-cell
+      >
+      <mat-cell *matCellDef="let row">
+        <div *ngIf="row.status === 'new'; else Recheck">
+          <button
+            mat-raised-button
+            (click)="categorize(row._id, row.categorize_url, row.category)"
+            color="primary"
+          >
+            Categorize
+          </button>
+        </div>
+        <ng-template #Recheck>
+          <button
+            *ngIf="row.status === 'verified'; else Recategorize"
+            mat-raised-button
+            (click)="categorize(row._id, row.categorize_url, row.category)"
+            color="primary"
+          >
+            Recheck
+          </button>
+        </ng-template>
+        <ng-template #Recategorize>
+          <button
+            mat-raised-button
+            (click)="categorize(row._id, row.check_url, row.category)"
+            color="primary"
+          >
+            Recategorize
+          </button>
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Check Category -->
+    <ng-container matColumnDef="check">
+      <mat-header-cell *matHeaderCellDef mat-sort-header
+        >Action</mat-header-cell
+      >
+      <mat-cell *matCellDef="let row">
+        <div>
+          <button
+            mat-raised-button
+            [disabled]="row.status === 'verified'"
+            (click)="check(row._id, row.check_url)"
+            color="primary"
+          >
+            Check Category
+          </button>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Header Info -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row
+      class="table-row cursor-pointer"
+      *matRowDef="let row; columns: displayedColumns"
+    ></mat-row>
+  </mat-table>
+</div>

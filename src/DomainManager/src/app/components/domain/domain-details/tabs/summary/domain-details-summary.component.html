@@ -1,0 +1,155 @@
+<div class="flex flex-container tab">
+  <!-- <h5>Template : {{tdTabSvc.template_data.name}}</h5> -->
+  <div class="flex flex-center" *ngIf="ddTabSvc.isLoading()">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!ddTabSvc.isLoading()">
+    <h4>General Information for: {{ ddTabSvc.domain_data.name }}</h4>
+
+    <div class="flex-column flex-full summary_list_rows" [formGroup]="tabForm">
+      <div class="flex-row">
+        <div class="flex sl_flex_title">Domain is Live</div>
+        <div class="flex sl_flex_content">
+          <mat-icon
+            *ngIf="ddTabSvc.domain_data.is_active; else notLive"
+            aria-hidden="false"
+            aria-label="check_circle icon"
+          >
+            check_circle</mat-icon
+          >
+          <ng-template #notLive>
+            <mat-icon aria-label="cancel icon">cancel</mat-icon>
+          </ng-template>
+        </div>
+      </div>
+      <div
+        *ngIf="
+          ddTabSvc.domain_data.cloudfront_status &&
+          ddTabSvc.domain_data.cloudfront_status.Status !== 'Deployed'
+        "
+        class="flex-row"
+      >
+        <div class="flex sl_flex_title">Domain Deployment Status</div>
+        <div class="flex sl_flex_content">
+          {{ ddTabSvc.domain_data.cloudfront_status.Status }}
+        </div>
+      </div>
+      <div class="flex-row" *ngIf="ddTabSvc.domain_data?.whois.registrar">
+        <div class="flex sl_flex_title">Registrar</div>
+        <div class="flex sl_flex_content">
+          {{ ddTabSvc.domain_data.whois.registrar }}
+        </div>
+      </div>
+      <div class="flex-row" *ngIf="ddTabSvc.domain_data?.whois.expiration_date">
+        <div class="flex sl_flex_title">Expires On</div>
+        <div class="flex sl_flex_content">
+          {{ ddTabSvc.domain_data.whois.expiration_date | date : "MM/dd/yy" }}
+        </div>
+      </div>
+      <div class="flex-row" *ngIf="ddTabSvc.domain_data?.template_name">
+        <div class="flex sl_flex_title">Template Name</div>
+        <div class="flex sl_flex_content">
+          {{ ddTabSvc.domain_data.template_name }}
+        </div>
+      </div>
+      <h5 *ngIf="application_details?.contact_name">Program Lead</h5>
+      <div class="flex-row" *ngIf="application_details?.contact_name">
+        <div class="flex sl_flex_title">Name</div>
+        <div class="flex sl_flex_content">
+          {{ application_details?.contact_name }}
+        </div>
+      </div>
+      <div class="flex-row" *ngIf="application_details?.contact_email">
+        <div class="flex sl_flex_title">Email</div>
+        <div class="flex sl_flex_content">
+          {{ application_details?.contact_email }}
+        </div>
+      </div>
+      <div class="flex-row" *ngIf="application_details?.contact_phone">
+        <div class="flex sl_flex_title">Phone</div>
+        <div class="flex sl_flex_content">
+          {{ application_details?.contact_phone }}
+        </div>
+      </div>
+
+      <!-- Point of Contact -->
+      <h5>Point of Contact</h5>
+      <h5 class="text-muted">Changes will automatically be updated.</h5>
+      <form [formGroup]="pocForm">
+        <mat-form-field class="flex-row">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="contact_name" />
+        </mat-form-field>
+        <br />
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="contact_email" />
+        </mat-form-field>
+        <br />
+        <mat-form-field>
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="contact_phone" />
+        </mat-form-field>
+      </form>
+
+      <!-- Assessment ID -->
+      <h5>Assessment ID</h5>
+      <h5 class="text-muted">Changes below will automatically be updated.</h5>
+      <form [formGroup]="assessmentIdForm">
+        <mat-form-field class="flex-row">
+          <mat-label>ID</mat-label>
+          <input matInput formControlName="assessment_id" />
+        </mat-form-field>
+      </form>
+
+      <!-- Application If ADMIN -->
+      <div *ngIf="ddTabSvc.userIsAdmin">
+        <h5>Team or Application</h5>
+        <div>
+          <mat-form-field style="width: 20em" appearance="outline">
+            <mat-select
+              (selectionChange)="changeApplication($event.value)"
+              formControlName="application_id"
+            >
+              <mat-option [value]="null">--Select--</mat-option>
+              <mat-option *ngFor="let a of application_list" [value]="a._id">
+                {{ a.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Application If base user -->
+      <div class="flex-row" *ngIf="!ddTabSvc.userIsAdmin">
+        <div class="flex sl_flex_title">Team or Application</div>
+        <div
+          *ngIf="ddTabSvc.domain_data.application_name"
+          class="flex sl_flex_content"
+        >
+          {{ ddTabSvc.domain_data.application_name }}
+        </div>
+        <div
+          *ngIf="!ddTabSvc.domain_data.application_name"
+          class="flex sl_flex_content"
+        >
+          No application assigned
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-row" *ngIf="ddTabSvc.domain_data?.is_generating_template">
+      <div class="flex sl_flex_title">Template Generating</div>
+      <div class="flex sl_flex_content">True</div>
+    </div>
+    <div class="flex-row" *ngIf="ddTabSvc.domain_data?.is_launching">
+      <div class="flex sl_flex_title">Launching In Progress</div>
+      <div class="flex sl_flex_content">True</div>
+    </div>
+    <div class="flex-row" *ngIf="ddTabSvc.domain_data?.is_delaunching">
+      <div class="flex sl_flex_title">Taking Down In Progress</div>
+      <div class="flex sl_flex_content">True</div>
+    </div>
+  </div>
+</div>

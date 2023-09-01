@@ -1,0 +1,62 @@
+<div class="flex flex-container">
+  <div>
+    <div class="help-page-desc">
+      <h3>Help Menu</h3>
+
+      <div class="text-muted desc-field mb-5">
+        Below are some options to help you use the Domain Manager application.
+      </div>
+    </div>
+  </div>
+
+  <div class="help-page-body">
+    <h4 class="video-section">User Guide</h4>
+    <div class="list-sub-section">
+      <div class="text-muted desc-field">
+        The Domain Manager user guide contains detailed instructions on how to
+        use the application. The user guide is available to view as HTML or
+        download as a pdf.
+      </div>
+      <a class="clickable" (click)="helpSvc.openUserGuide()"
+        >Open User Manual</a
+      >
+      <!-- <a
+        class="clickable"
+        href="{{ settingsService.settings.apiUrl }}/help"
+        target="_blank"
+        >Open User Manual</a
+      > -->
+    </div>
+    <div class="list-sub-section">
+      <a class="clickable" (click)="help()">Download User Manual</a>
+    </div>
+    <h4 class="video-section">Video Tutorials</h4>
+    <div class="list-sub-section">
+      <div class="text-muted desc-field">
+        Below is a link to all the video tutorials for the Domain Manager
+        application.
+      </div>
+      <a class="clickable" routerLink="/video-tutorials">Video Tutorials</a>
+    </div>
+    <h4 class="video-section">Submit Issue</h4>
+    <div class="list-sub-section">
+      <div class="text-muted desc-field">
+        Below is a link that will take you to the GitHub 'Submit Issue' page for
+        the Domain Manager application. Issues submitted here will be seen by
+        the team and administration and will be addressed as quickly as
+        possible.
+      </div>
+      <a class="clickable" (click)="bugReport()">Report Bug</a>
+    </div>
+    <h4 class="video-section">Request Feature</h4>
+    <div class="list-sub-section">
+      <div class="text-muted desc-field">
+        Below is a link that will take you to the GitHub 'Request Feature' page
+        for the Domain Manager application. Features requested here will be seen
+        by the administration and reviewed for possible inclusion in a future
+        release.
+      </div>
+      <a class="clickable" (click)="featureRequest()">Request Feature</a>
+    </div>
+  </div>
+</div>

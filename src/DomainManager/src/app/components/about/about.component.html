@@ -1,0 +1,68 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Version Details</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <h5>Current UI version</h5>
+    <div class="text-muted desc-field">
+      {{ aboutData.ui_commit_id }}
+    </div>
+
+    <h5>Current API version</h5>
+    <div class="text-muted desc-field">
+      {{ aboutData.api_commit_id }}
+    </div>
+
+    <h5>Date Last Deployed</h5>
+    <div class="text-muted desc-field">
+      {{ aboutData.deployed_date }}
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="userAuthSvc.isAdmin">
+  <mat-card-header>
+    <mat-card-title>Application Settings</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Forward Domain Emails To</mat-label>
+        <input
+          matInput
+          type="test"
+          trim="blur"
+          [(ngModel)]="settingsData.SES_FORWARD_EMAIL"
+        />
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Send User Notifications Email To</mat-label>
+        <input
+          matInput
+          type="test"
+          trim="blur"
+          [(ngModel)]="settingsData.USER_NOTIFICATION_EMAIL"
+        />
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Send Categorization Request Emails To</mat-label>
+        <input
+          matInput
+          type="test"
+          trim="blur"
+          [(ngModel)]="settingsData.CATEGORIZATION_EMAIL"
+        />
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="saveSettings()">
+      Save Settings
+    </button>
+  </mat-card-actions>
+</mat-card>
