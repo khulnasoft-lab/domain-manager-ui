@@ -9,7 +9,7 @@ RUN npm install -g @angular/cli
 
 # Install Packages
 COPY ./src/DomainManager/package*.json ./
-RUN npm install --force
+RUN npm install
 
 # Copy source
 COPY ./src/DomainManager .

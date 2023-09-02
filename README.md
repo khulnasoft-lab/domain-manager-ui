@@ -1,14 +1,14 @@
-# domain-manager #
+# domain-manager-ui #
 
-[![GitHub Build Status](https://github.com/khulnasoft-lab/domain-manager/workflows/build/badge.svg)](https://github.com/khulnasoft-lab/domain-manager/actions/workflows/build.yml)
-[![CodeQL](https://github.com/khulnasoft-lab/domain-manager/workflows/CodeQL/badge.svg)](https://github.com/khulnasoft-lab/domain-manager/actions/workflows/codeql-analysis.yml)
-[![Known Vulnerabilities](https://snyk.io/test/github/khulnasoft-lab/domain-manager/badge.svg)](https://snyk.io/test/github/khulnasoft-lab/domain-manager)
+[![GitHub Build Status](https://github.com/khulnasoft-lab/domain-manager-ui/workflows/build/badge.svg)](https://github.com/khulnasoft-lab/domain-manager-ui/actions/workflows/build.yml)
+[![CodeQL](https://github.com/khulnasoft-lab/domain-manager-ui/workflows/CodeQL/badge.svg)](https://github.com/khulnasoft-lab/domain-manager-ui/actions/workflows/codeql-analysis.yml)
+[![Known Vulnerabilities](https://snyk.io/test/github/khulnasoft-lab/domain-manager-ui/badge.svg)](https://snyk.io/test/github/khulnasoft-lab/domain-manager-ui)
 
 ## Docker Image ##
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/khulnasoft-lab/domain-manager)](https://hub.docker.com/r/khulnasoft-lab/domain-manager)
-[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/khulnasoft-lab/domain-manager)](https://hub.docker.com/r/khulnasoft-lab/domain-manager)
-[![Platforms](https://img.shields.io/badge/platforms-amd64%20%7C%20arm%2Fv6%20%7C%20arm%2Fv7%20%7C%20arm64%20%7C%20ppc64le%20%7C%20s390x-blue)](https://hub.docker.com/r/khulnasoft-lab/domain-manager/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/khulnasoft-lab/domain-manager-ui)](https://hub.docker.com/r/khulnasoft-lab/domain-manager-ui)
+[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/khulnasoft-lab/domain-manager-ui)](https://hub.docker.com/r/khulnasoft-lab/domain-manager-ui)
+[![Platforms](https://img.shields.io/badge/platforms-amd64%20%7C%20arm%2Fv6%20%7C%20arm%2Fv7%20%7C%20arm64%20%7C%20ppc64le%20%7C%20s390x-blue)](https://hub.docker.com/r/khulnasoft-lab/domain-manager-ui/tags)
 
 This is a Docker project to interact with the
 [Domain Manager API](https://github.com/khulnasoft-lab/domain-manager-api)
@@ -20,10 +20,10 @@ making categorization requests.
 
 ### Running with Docker ###
 
-To run the `khulnasoft-lab/domain-manager` image via Docker:
+To run the `khulnasoft-lab/domain-manager-ui` image via Docker:
 
 ```console
-docker run khulnasoft-lab/domain-manager:1.0.0
+docker run khulnasoft-lab/domain-manager-ui:1.0.0
 ```
 
 ### Running with Docker Compose ###
@@ -36,7 +36,7 @@ docker run khulnasoft-lab/domain-manager:1.0.0
 
     services:
       ui:
-        image: khulnasoft-lab/domain-manager:1.0.0
+        image: khulnasoft-lab/domain-manager-ui:1.0.0
         volumes:
           - type: bind
             source: <your_log_dir>
@@ -80,7 +80,7 @@ docker run khulnasoft-lab/domain-manager:1.0.0
 1. Pull the new image:
 
     ```console
-    docker pull khulnasoft-lab/domain-manager:1.0.0
+    docker pull khulnasoft-lab/domain-manager-ui:1.0.0
     ```
 
 1. Recreate and run the container by following the [previous instructions](#running-with-docker).
@@ -88,20 +88,20 @@ docker run khulnasoft-lab/domain-manager:1.0.0
 ## Image tags ##
 
 The images of this container are tagged with [semantic
-versions](https://semver.org) of the underlying domain-manager project that they
+versions](https://semver.org) of the underlying domain-manager-ui project that they
 containerize.  It is recommended that most users use a version tag (e.g.
 `:1.0.0`).
 
 | Image:tag | Description |
 |-----------|-------------|
-|`khulnasoft-lab/domain-manager:1.0.0`| An exact release version. |
-|`khulnasoft-lab/domain-manager:1.0`| The most recent release matching the major and minor version numbers. |
-|`khulnasoft-lab/domain-manager:1`| The most recent release matching the major version number. |
-|`khulnasoft-lab/domain-manager:edge` | The most recent image built from a merge into the `develop` branch of this repository. |
-|`khulnasoft-lab/domain-manager:nightly` | A nightly build of the `develop` branch of this repository. |
-|`khulnasoft-lab/domain-manager:latest`| The most recent release image pushed to a container registry.  Pulling an image using the `:latest` tag [should be avoided.](https://vsupalov.com/docker-latest-tag/) |
+|`khulnasoft-lab/domain-manager-ui:1.0.0`| An exact release version. |
+|`khulnasoft-lab/domain-manager-ui:1.0`| The most recent release matching the major and minor version numbers. |
+|`khulnasoft-lab/domain-manager-ui:1`| The most recent release matching the major version number. |
+|`khulnasoft-lab/domain-manager-ui:edge` | The most recent image built from a merge into the `develop` branch of this repository. |
+|`khulnasoft-lab/domain-manager-ui:nightly` | A nightly build of the `develop` branch of this repository. |
+|`khulnasoft-lab/domain-manager-ui:latest`| The most recent release image pushed to a container registry.  Pulling an image using the `:latest` tag [should be avoided.](https://vsupalov.com/docker-latest-tag/) |
 
-See the [tags tab](https://hub.docker.com/r/khulnasoft-lab/domain-manager/tags) on Docker
+See the [tags tab](https://hub.docker.com/r/khulnasoft-lab/domain-manager-ui/tags) on Docker
 Hub for a list of all the supported tags.
 
 ## Ports ##
@@ -132,8 +132,8 @@ Build the image locally using this git repository as the [build context](https:/
 ```console
 docker build \
   --build-arg VERSION=1.0.0 \
-  --tag khulnasoft-lab/domain-manager:1.0.0 \
-  https://github.com/khulnasoft-lab/domain-manager.git#develop
+  --tag khulnasoft-lab/domain-manager-ui:1.0.0 \
+  https://github.com/khulnasoft-lab/domain-manager-ui.git#develop
 ```
 
 ## Cross-platform builds ##
@@ -146,8 +146,8 @@ Docker:
    or the command line:
 
     ```console
-    git clone https://github.com/khulnasoft-lab/domain-manager.git
-    cd domain-manager
+    git clone https://github.com/khulnasoft-lab/domain-manager-ui.git
+    cd domain-manager-ui
     ```
 
 1. Create the `Dockerfile-x` file with `buildx` platform support:
@@ -164,5 +164,5 @@ Docker:
       --platform linux/amd64 \
       --build-arg VERSION=1.0.0 \
       --output type=docker \
-      --tag khulnasoft-lab/domain-manager:1.0.0 .
+      --tag khulnasoft-lab/domain-manager-ui:1.0.0 .
     ```

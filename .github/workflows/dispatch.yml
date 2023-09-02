@@ -19,6 +19,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.DOMAIN_MANAGER_ACCESS_TOKEN }}
-          repository: cisagov/domain-manager-cicd
+          repository: khulnasoft-lab/domain-manager-cicd
           event-type: deploy
-          client-payload: '{"trigger": "domain-manager"}'
+          client-payload: '{"trigger": "domain-manager-ui"}'
